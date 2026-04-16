@@ -1,0 +1,384 @@
+/* ── Reset & Base ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e4e8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.app-header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.header-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.header-nav a {
+  font-size: 0.85rem;
+  color: #6b7c93;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.header-nav a:hover,
+.header-nav a:focus {
+  color: #2c3e50;
+  text-decoration: underline;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────── */
+.container {
+  max-width: 560px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.container-wide {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* ── Card ────────────────────────────────────────────────────────── */
+.form-card,
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form-card h2,
+.card h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 1rem;
+}
+
+/* ── Form elements ───────────────────────────────────────────────── */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #34495e;
+  margin-bottom: 0.35rem;
+}
+
+.form-group input[type="text"],
+.form-group select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccd1d9;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #1a1a1a;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-group select:disabled {
+  background-color: #f0f2f5;
+  color: #8e99a4;
+  cursor: not-allowed;
+}
+
+/* ── Inline field errors ─────────────────────────────────────────── */
+.field-error {
+  display: block;
+  font-size: 0.82rem;
+  color: #dc3545;
+  min-height: 1.2em;
+  margin-top: 0.25rem;
+}
+
+/* ── Loading hint ────────────────────────────────────────────────── */
+.loading-hint {
+  display: block;
+  font-size: 0.82rem;
+  color: #6b7c93;
+  margin-top: 0.25rem;
+}
+
+/* ── Messages (success / error banners) ──────────────────────────── */
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  font-size: 0.92rem;
+  margin-bottom: 1.25rem;
+}
+
+.message-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #cbd5e1;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid #e0e4e8;
+  font-size: 0.9rem;
+}
+
+.data-table th {
+  font-weight: 600;
+  color: #4a5568;
+  background-color: #f7f9fc;
+}
+
+.data-table td .actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ── Inline form rows (admin) ────────────────────────────────────── */
+.inline-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.inline-form .form-group {
+  margin-bottom: 0;
+  flex: 1 1 auto;
+}
+
+.inline-form .btn {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+/* ── Section spacing (admin) ─────────────────────────────────────── */
+.section {
+  margin-bottom: 2rem;
+}
+
+.section + .section {
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e4e8;
+}
+
+/* ── Manager page ────────────────────────────────────────────────── */
+.download-section {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.download-section p {
+  color: #4a5568;
+  margin-bottom: 1rem;
+}
+
+/* ── Utility ─────────────────────────────────────────────────────── */
+[hidden] {
+  display: none !important;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .app-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .form-card,
+  .card {
+    padding: 1.25rem;
+  }
+
+  .inline-form {
+    flex-direction: column;
+  }
+}
+
+/* ── Dialog overlay ──────────────────────────────────────────────── */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dialog {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.dialog h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+}
+
+.dialog p {
+  font-size: 0.92rem;
+  color: #4a5568;
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* ── Program list (admin) ────────────────────────────────────────── */
+.program-list {
+  list-style: none;
+  margin-top: 0.75rem;
+}
+
+.program-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0e4e8;
+  font-size: 0.92rem;
+}
+
+.program-list li:last-child {
+  border-bottom: none;
+}
+
+.program-list .program-name {
+  flex: 1;
+  color: #1a1a1a;
+}
+
+.program-list .edit-input {
+  flex: 1;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccd1d9;
+  border-radius: 4px;
+}
