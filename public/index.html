@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift Preference Tool</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Shift Preference Tool</h1>
+    <nav class="header-nav">
+      <a href="/admin">Admin</a>
+      <a href="/manager">Manager</a>
+      <a href="/dashboard">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="form-card">
+      <h2>Submit Shift Preferences</h2>
+
+      <div id="confirmation-message" class="message message-success" hidden>
+        Your shift preferences have been recorded successfully.
+      </div>
+
+      <div id="error-message" class="message message-error" hidden></div>
+
+      <form id="preference-form" novalidate>
+        <div class="form-group">
+          <label for="login-id">Login ID</label>
+          <input
+            type="text"
+            id="login-id"
+            name="loginId"
+            placeholder="e.g., nilepas@"
+            autocomplete="off"
+            required
+          >
+          <span class="field-error" id="login-id-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="program-select">Program</label>
+          <select id="program-select" name="programId" required>
+            <option value="">-- Select a Program --</option>
+          </select>
+          <span class="field-error" id="program-error"></span>
+          <span class="loading-hint" id="program-loading" hidden>Loading programs…</span>
+        </div>
+
+        <div class="form-group">
+          <label for="priority1-select">Priority 1</label>
+          <select id="priority1-select" name="priority1ShiftId" disabled required>
+            <option value="">-- Select a program first --</option>
+          </select>
+          <span class="field-error" id="priority1-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="priority2-select">Priority 2</label>
+          <select id="priority2-select" name="priority2ShiftId" disabled required>
+            <option value="">-- Select a program first --</option>
+          </select>
+          <span class="field-error" id="priority2-error"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="priority3-select">Priority 3</label>
+          <select id="priority3-select" name="priority3ShiftId" disabled required>
+            <option value="">-- Select a program first --</option>
+          </select>
+          <span class="field-error" id="priority3-error"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn">Submit Preferences</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="/js/preference-form.js"></script>
+</body>
+</html>
