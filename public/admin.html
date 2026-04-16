@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WFM Planner - Shift Management</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Shift Preference Tool</h1>
+    <nav class="header-nav">
+      <a href="/">Preference Form</a>
+      <a href="/manager">Manager</a>
+      <a href="/dashboard">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="container-wide">
+    <!-- ── Program Management ──────────────────────────────────── -->
+    <div class="card section" id="program-section">
+      <h2>Program Management</h2>
+
+      <div id="program-message" class="message" hidden></div>
+
+      <form id="create-program-form" class="inline-form" novalidate>
+        <div class="form-group">
+          <label for="new-program-name">New Program Name</label>
+          <input type="text" id="new-program-name" placeholder="e.g., Customer Support" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Add Program</button>
+      </form>
+
+      <ul id="program-list" class="program-list" aria-label="Programs"></ul>
+    </div>
+
+    <!-- ── Shift Management ────────────────────────────────────── -->
+    <div class="card section" id="shift-section">
+      <h2>Shift Management</h2>
+
+      <div id="shift-message" class="message" hidden></div>
+
+      <form id="create-shift-form" class="inline-form" novalidate>
+        <div class="form-group">
+          <label for="shift-program-select">Program</label>
+          <select id="shift-program-select" required>
+            <option value="">-- Select a Program --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="new-shift-name">Shift Name</label>
+          <input type="text" id="new-shift-name" placeholder="e.g., Morning 6AM–2PM" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Add Shift</button>
+      </form>
+
+      <table class="data-table" id="shift-table">
+        <thead>
+          <tr>
+            <th>Shift Name</th>
+            <th>Program</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="shift-table-body"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ── Confirmation dialog ─────────────────────────────────── -->
+  <div id="confirm-dialog-overlay" class="dialog-overlay" hidden>
+    <div class="dialog" role="alertdialog" aria-labelledby="dialog-title" aria-describedby="dialog-body">
+      <h3 id="dialog-title">Confirm Deletion</h3>
+      <p id="dialog-body"></p>
+      <div class="dialog-actions">
+        <button id="dialog-cancel" class="btn btn-secondary btn-sm">Cancel</button>
+        <button id="dialog-confirm" class="btn btn-danger btn-sm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/shift-management.js"></script>
+</body>
+</html>
