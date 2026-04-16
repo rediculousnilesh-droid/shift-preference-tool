@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Shift Preferences</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem}
+.stat-card{background:#fff;border-radius:8px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.stat-card h3{font-size:.95rem;color:#6b7c93;font-weight:500;margin-bottom:.5rem}
+.stat-card .stat-value{font-size:2rem;font-weight:700;color:#2c3e50}
+.pivot-table{width:100%;border-collapse:collapse;margin-top:.75rem;font-size:.88rem}
+.pivot-table th,.pivot-table td{padding:.5rem .75rem;border:1px solid #e0e4e8;text-align:center}
+.pivot-table th{background:#f0f4f8;color:#374151;font-weight:600}
+.pivot-table td.label{text-align:left;font-weight:500;background:#f9fafb}
+.pivot-table td.count{font-weight:600;color:#2563eb}
+.bar{display:inline-block;height:18px;background:#3b82f6;border-radius:3px;margin-right:8px;vertical-align:middle;min-width:4px}
+.bar-row{display:flex;align-items:center;gap:.5rem;padding:.35rem 0}
+.bar-label{min-width:140px;font-size:.88rem;color:#374151}
+.bar-count{font-size:.85rem;font-weight:600;color:#2563eb;min-width:30px}
+.section-title{font-size:1.1rem;font-weight:600;color:#2c3e50;margin:1.5rem 0 .75rem;padding-bottom:.5rem;border-bottom:2px solid #e0e4e8}
+@media(max-width:700px){.dashboard-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <h1>Shift Preference Tool</h1>
+  <nav class="header-nav">
+    <a href="/">Preference Form</a>
+    <a href="/admin">Admin</a>
+    <a href="/manager">Manager</a>
+    <a href="/dashboard" style="font-weight:600;color:#2563eb">Dashboard</a>
+  </nav>
+</header>
+
+<main class="container-wide">
+  <div class="card">
+    <h2>Preference Dashboard</h2>
+    <div id="loading" style="text-align:center;color:#6b7c93;padding:2rem">Loading dashboard...</div>
+    <div id="dashboard-content" hidden>
+
+      <!-- Summary cards -->
+      <div class="dashboard-grid" id="summary-cards"></div>
+
+      <!-- By Program -->
+      <div class="section-title">Headcount by Program</div>
+      <div id="chart-program"></div>
+
+      <!-- By Shift (Priority 1 only) -->
+      <div class="section-title">Priority 1 Preferences by Shift</div>
+      <div id="chart-shift-p1"></div>
+
+      <!-- Pivot: Program × Shift (Priority 1) -->
+      <div class="section-title">Program × Shift Pivot (Priority 1 Count)</div>
+      <div id="pivot-table-container"></div>
+
+      <!-- By Date -->
+      <div class="section-title">Submissions by Date</div>
+      <div id="chart-date"></div>
+
+      <!-- All priorities breakdown -->
+      <div class="section-title">All Priorities Breakdown by Shift</div>
+      <table class="pivot-table" id="priority-breakdown"></table>
+
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  fetch('/api/dashboard')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      document.getElementById('loading').hidden = true;
+      document.getElementById('dashboard-content').hidden = false;
+      renderDashboard(data);
+    })
+    .catch(function(){
+      document.getElementById('loading').textContent = 'Failed to load dashboard data.';
+    });
+
+  function renderDashboard(d){
+    // Summary cards
+    var programs = Object.keys(d.byProgram);
+    var cards = document.getElementById('summary-cards');
+    cards.innerHTML =
+      '<div class="stat-card"><h3>Total Submissions</h3><div class="stat-value">'+d.total+'</div></div>'+
+      '<div class="stat-card"><h3>Programs</h3><div class="stat-value">'+programs.length+'</div></div>';
+
+    // By Program bar chart
+    renderBarChart('chart-program', d.byProgram, d.total);
+
+    // By Shift Priority 1
+    renderBarChart('chart-shift-p1', d.byShiftPriority.priority1, d.total);
+
+    // Pivot table: Program × Shift
+    renderPivot(d);
+
+    // By Date
+    renderBarChart('chart-date', d.byDate, d.total);
+
+    // Priority breakdown
+    renderPriorityBreakdown(d.byShiftPriority);
+  }
+
+  function renderBarChart(containerId, dataObj, total){
+    var el = document.getElementById(containerId);
+    var entries = Object.entries(dataObj || {}).sort(function(a,b){ return b[1]-a[1]; });
+    if(entries.length === 0){ el.innerHTML = '<p style="color:#6b7c93;font-size:.9rem">No data yet</p>'; return; }
+    var max = Math.max.apply(null, entries.map(function(e){return e[1];}));
+    var html = '';
+    entries.forEach(function(e){
+      var pct = max > 0 ? (e[1]/max*100) : 0;
+      html += '<div class="bar-row"><span class="bar-label">'+e[0]+'</span><span class="bar" style="width:'+Math.max(pct,2)+'%"></span><span class="bar-count">'+e[1]+'</span></div>';
+    });
+    el.innerHTML = html;
+  }
+
+  function renderPivot(d){
+    var container = document.getElementById('pivot-table-container');
+    var programs = Object.keys(d.byProgramShift);
+    if(programs.length === 0){ container.innerHTML = '<p style="color:#6b7c93;font-size:.9rem">No data yet</p>'; return; }
+
+    // Collect all shift names
+    var allShifts = {};
+    programs.forEach(function(p){ Object.keys(d.byProgramShift[p]).forEach(function(s){ allShifts[s]=true; }); });
+    var shiftNames = Object.keys(allShifts).sort();
+
+    var html = '<table class="pivot-table"><thead><tr><th>Program</th>';
+    shiftNames.forEach(function(s){ html += '<th>'+s+'</th>'; });
+    html += '<th>Total</th></tr></thead><tbody>';
+
+    var shiftTotals = {};
+    shiftNames.forEach(function(s){ shiftTotals[s]=0; });
+    var grandTotal = 0;
+
+    programs.sort().forEach(function(p){
+      html += '<tr><td class="label">'+p+'</td>';
+      var rowTotal = 0;
+      shiftNames.forEach(function(s){
+        var val = (d.byProgramShift[p]||{})[s] || 0;
+        html += '<td class="count">'+(val||'-')+'</td>';
+        shiftTotals[s] += val;
+        rowTotal += val;
+      });
+      grandTotal += rowTotal;
+      html += '<td class="count">'+rowTotal+'</td></tr>';
+    });
+
+    html += '<tr><td class="label" style="font-weight:700">Total</td>';
+    shiftNames.forEach(function(s){ html += '<td class="count" style="font-weight:700">'+shiftTotals[s]+'</td>'; });
+    html += '<td class="count" style="font-weight:700">'+grandTotal+'</td></tr>';
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  function renderPriorityBreakdown(bp){
+    var table = document.getElementById('priority-breakdown');
+    var allShifts = {};
+    ['priority1','priority2','priority3'].forEach(function(p){
+      Object.keys(bp[p]||{}).forEach(function(s){ allShifts[s]=true; });
+    });
+    var shiftNames = Object.keys(allShifts).sort();
+    if(shiftNames.length === 0){ table.innerHTML = '<tr><td style="color:#6b7c93">No data yet</td></tr>'; return; }
+
+    var html = '<thead><tr><th>Shift</th><th>Priority 1</th><th>Priority 2</th><th>Priority 3</th><th>Total</th></tr></thead><tbody>';
+    shiftNames.forEach(function(s){
+      var v1 = (bp.priority1||{})[s]||0;
+      var v2 = (bp.priority2||{})[s]||0;
+      var v3 = (bp.priority3||{})[s]||0;
+      html += '<tr><td class="label">'+s+'</td><td class="count">'+v1+'</td><td class="count">'+v2+'</td><td class="count">'+v3+'</td><td class="count" style="font-weight:700">'+(v1+v2+v3)+'</td></tr>';
+    });
+    html += '</tbody>';
+    table.innerHTML = html;
+  }
+})();
+</script>
+</body>
+</html>
