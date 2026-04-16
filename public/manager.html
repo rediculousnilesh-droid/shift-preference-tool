@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager - Download Shift Preferences</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Shift Preference Tool</h1>
+    <nav class="header-nav">
+      <a href="/">Preference Form</a>
+      <a href="/admin">Admin</a>
+      <a href="/dashboard">Dashboard</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="form-card">
+      <h2>Download Shift Preferences</h2>
+
+      <div id="download-message" class="message" hidden></div>
+
+      <div class="download-section">
+        <p>Download a CSV file containing all submitted shift preferences, sorted alphabetically by Login ID.</p>
+        <button type="button" class="btn btn-primary" id="download-btn">Download CSV</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/manager.js"></script>
+</body>
+</html>
